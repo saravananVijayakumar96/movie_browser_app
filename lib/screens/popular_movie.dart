@@ -1,9 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:movie_browser_app/controllers/popular_movie.dart';
-import 'package:movie_browser_app/screens/popular_movie_details.dart';
-import 'package:provider/provider.dart';
+import 'package:movie_browser_app/utils/exports.dart';
 
 class PopularMovieList extends StatefulWidget {
   const PopularMovieList({super.key});
@@ -105,11 +100,13 @@ class _PopularMovieListState extends State<PopularMovieList> {
   Widget popularMovieCard(movie) {
     return InkWell(
         onTap: () {
-          movieController.selectedPopularMovie(movie);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const PopularMovieDetails()),
-          );
+          if (movie != null) {
+            movieController.selectedPopularMovie(movie);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const PopularMovieDetails()),
+            );
+          }
         },
         child: Card(
           shape:
@@ -134,6 +131,7 @@ class _PopularMovieListState extends State<PopularMovieList> {
                     size: 40,
                     color: Colors.black,
                   ),
+                  cacheKey: '${movie.posterPath}',
                 ),
               ),
               // Title & Release Date

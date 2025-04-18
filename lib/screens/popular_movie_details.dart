@@ -1,8 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:movie_browser_app/controllers/popular_movie.dart';
-import 'package:provider/provider.dart';
+import 'package:movie_browser_app/utils/exports.dart';
 
 class PopularMovieDetails extends StatefulWidget {
   const PopularMovieDetails({super.key});

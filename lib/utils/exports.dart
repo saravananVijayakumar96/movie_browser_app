@@ -1,0 +1,11 @@
+export 'package:cached_network_image/cached_network_image.dart';
+export 'package:flutter/material.dart';
+export 'package:flutter_dotenv/flutter_dotenv.dart';
+export 'package:movie_browser_app/controllers/popular_movie.dart';
+export 'package:provider/provider.dart';
+export 'package:movie_browser_app/screens/popular_movie_details.dart';
+export 'package:movie_browser_app/models/popular_movie.dart';
+export 'package:movie_browser_app/services/api_service.dart';
+export 'package:dio/dio.dart';
+export '../utils/constants.dart';
+export 'package:movie_browser_app/screens/popular_movie.dart';

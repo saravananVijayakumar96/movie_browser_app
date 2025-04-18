@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:movie_browser_app/models/popular_movie.dart';
-import 'package:movie_browser_app/services/api_service.dart';
+import 'package:movie_browser_app/utils/exports.dart';
 import 'package:intl/intl.dart';
 
 class PopularMovieController with ChangeNotifier {

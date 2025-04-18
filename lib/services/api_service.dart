@@ -1,7 +1,5 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:movie_browser_app/models/popular_movie.dart';
-import '../utils/constants.dart';
+import 'dart:io';
+import 'package:movie_browser_app/utils/exports.dart';
 
 class ApiService {
   final Dio _dio = Dio(BaseOptions(
@@ -11,6 +9,37 @@ class ApiService {
     },
   ));
 
+  ApiService() {
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onError: (DioException err, handler) {
+          String errorMsg = 'Something went wrong';
+
+          if (err.error is SocketException) {
+            errorMsg = 'No internet connection';
+          } else if (err.response != null) {
+            switch (err.response?.statusCode) {
+              case 500:
+                errorMsg = 'Internal Server Error';
+                break;
+              default:
+                errorMsg = 'Error: ${err.response?.statusCode}';
+            }
+          }
+
+          return handler.reject(
+            DioException(
+              requestOptions: err.requestOptions,
+              error: errorMsg,
+              type: err.type,
+              response: err.response,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Future<List<PopularMovieResult>> fetchPopularMovies({int page = 1}) async {
     try {
       final response = await _dio.get(popularMovieEndpoint, queryParameters: {
@@ -19,8 +48,10 @@ class ApiService {
 
       List results = response.data['results'];
       return results.map((e) => PopularMovieResult.fromJson(e)).toList();
-    } catch (e) {
-      throw 'Failed to fetch movies';
+    } on DioException catch (e) {
+      throw e.error ?? 'Failed to fetch movies';
+    } catch (_) {
+      throw 'Something went wrong';
     }
   }
 }
