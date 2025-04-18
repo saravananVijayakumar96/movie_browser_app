@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 
 class PopularMovieController with ChangeNotifier {
   final ApiService _api = ApiService();
-
   List<PopularMovieResult> movies = [];
+  PopularMovieResult? selectedMovie;
   int _page = 1;
   bool isLoading = false;
   bool hasMore = true;
@@ -27,9 +27,14 @@ class PopularMovieController with ChangeNotifier {
 
     try {
       final result = await _api.fetchPopularMovies(page: _page);
-      if (result.length < 20) hasMore = false;
-      movies.addAll(result);
-      _page++;
+      if (result.isEmpty && movies.isEmpty) {
+        error = 'No popular movies found.';
+        hasMore = false;
+      } else {
+        if (result.length < 10) hasMore = false;
+        movies.addAll(result);
+        _page++;
+      }
     } catch (e) {
       error = e.toString();
     }
@@ -42,9 +47,14 @@ class PopularMovieController with ChangeNotifier {
     try {
       final date = DateTime.parse(dateStr);
       final formatter = DateFormat('dd MMM yyyy');
-      return formatter.format(date).toUpperCase(); // → 23 JUN 2024
+      return formatter.format(date).toUpperCase();
     } catch (e) {
       return '';
     }
+  }
+
+  void selectedPopularMovie(PopularMovieResult movie) {
+    selectedMovie = movie;
+    notifyListeners();
   }
 }
